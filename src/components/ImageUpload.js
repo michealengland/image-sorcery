@@ -21,6 +21,8 @@ const ImageUploadForm = () => {
 	// Clear media selection.
 	const onMediaReset = () => {
 		setMedia();
+		setEditingImage();
+		setManipulatedImage();
 	}
 
 	// Submit form.
