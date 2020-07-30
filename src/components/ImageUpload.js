@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import resizeImage from '../utilities/jimp/ImageManipulation';
 
 const ImageUploadForm = () => {
-	const [media, setMedia] = useState();
-	const [manipulatedImage, setManipulatedImage] = useState();
+	const [media, setMedia] = useState();                       // initial upload.
+	const [editingImage, setEditingImage] = useState();         // during edit.
+	const [manipulatedImage, setManipulatedImage] = useState(); // new image.
 
 	// Set state during image resize.
-	const resizeCallback = (image) => {
-		setManipulatedImage(image);
+	const resizeCallback = (image, blob) => {
+		setEditingImage(blob);      // Image created using blobs.
+		setManipulatedImage(image); // Image created with File API.
 	}
 
 	// Set media upload.
@@ -47,6 +49,15 @@ const ImageUploadForm = () => {
 						<img
 							alt={ media.name }
 							src={ URL.createObjectURL(media) }
+						/>
+					</div>
+				}
+				{ editingImage &&
+					<div>
+						<p>Editing Image</p>
+						<img
+							alt={ editingImage.name }
+							src={ URL.createObjectURL(editingImage) }
 						/>
 					</div>
 				}

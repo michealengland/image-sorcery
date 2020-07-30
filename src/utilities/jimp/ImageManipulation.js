@@ -11,12 +11,18 @@ const resizeImage = (imageFile, callback) => {
 	.then( image => (
 		image
 			.getBuffer(Jimp.AUTO, (err, buffer) => {
+
+				// Conver buffer into blob for image editing.
+				const blob = new Blob([buffer], {type: imageFile.type});
+
+				console.log('blob', blob);
+
 				// Convert buffer to new image file.
 				const optimizedImage = new File([buffer], imageFile.name, {
 					type: 'Jimp.AUTO',
 				});
 
-				callback(optimizedImage);
+				callback(optimizedImage, blob);
 			})
 	))
 	.catch( err => {
