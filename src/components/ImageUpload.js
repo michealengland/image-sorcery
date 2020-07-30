@@ -14,11 +14,8 @@ const ImageUploadForm = () => {
 
 	// Set media upload.
 	const onMediaUpload = (e) => {
-		// Set fullsize image.
-		setMedia(e.target.files[0]);
-
-		// Resize
-		resizeImage(e.target.files[0], resizeCallback);
+		setMedia(e.target.files[0]);                    // Set fullsize image.
+		resizeImage(e.target.files[0], resizeCallback); // Run image through Jimp.
 	}
 
 	// Clear media selection.
