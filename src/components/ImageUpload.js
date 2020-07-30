@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import resizeImage from '../utilities/jimp/ImageManipulation';
 
 const ImageUploadForm = () => {
 	const [media, setMedia] = useState();                       // initial upload.
 	const [editingImage, setEditingImage] = useState();         // during edit.
 	const [manipulatedImage, setManipulatedImage] = useState(); // new image.
+	const [editSettings, setEditSettings] = useState({
+		brightness: 0,
+	});
 
 	// Set state during image resize.
 	const resizeCallback = (image, blob) => {
@@ -15,7 +18,7 @@ const ImageUploadForm = () => {
 	// Set media upload.
 	const onMediaUpload = (e) => {
 		setMedia(e.target.files[0]);                    // Set fullsize image.
-		resizeImage(e.target.files[0], resizeCallback); // Run image through Jimp.
+		resizeImage(e.target.files[0], resizeCallback, editSettings); // Run image through Jimp.
 	}
 
 	// Clear media selection.
@@ -31,10 +34,27 @@ const ImageUploadForm = () => {
 		console.log('form submitted');
 	}
 
+	// Brightness value beteen -1 and +1.
+	const onBrightnessSelect = (brightness) => {
+		const updateObject = {
+			...editSettings,
+			brightness: brightness.target.value/100,
+		}
+
+		setEditSettings( updateObject );
+	}
+
+	useEffect(() => {
+		console.log('edit settings changed');
+		if ( editSettings !== {} && media ) {
+			resizeImage(media, resizeCallback, editSettings)
+		}
+	}, [editSettings]);
+
 	return (
 		<form>
 			<div>
-				<label name="image-staging">Select an Image</label>
+				<label htmlFor="image-staging">Select an Image</label>
 				<input
 					accept="image/png, image/jpeg"
 					id="image-staging"
@@ -42,7 +62,7 @@ const ImageUploadForm = () => {
 					onChange={ onMediaUpload }
 					type="file"
 				/>
-				{ media &&
+				{/* { media &&
 					<div>
 						<button onClick={ onMediaReset }>Reset</button>
 						<img
@@ -50,17 +70,31 @@ const ImageUploadForm = () => {
 							src={ URL.createObjectURL(media) }
 						/>
 					</div>
-				}
+				} */}
 				{ editingImage &&
-					<div>
-						<p>Editing Image</p>
-						<img
-							alt={ editingImage.name }
-							src={ URL.createObjectURL(editingImage) }
+					<>
+						<div>
+							<p>Editing Image</p>
+							<img
+								style={{
+									maxHeight: '50vh',
+								}}
+								alt={ editingImage.name }
+								src={ URL.createObjectURL(editingImage) }
+							/>
+						</div>
+						<label htmlFor="brightness">Brightness</label>
+						<input
+							id="brightness"
+							max="100"
+							min="-100"
+							name="brightness"
+							onChange={ onBrightnessSelect }
+							type="range"
 						/>
-					</div>
+					</>
 				}
-				{ manipulatedImage &&
+				{/* { manipulatedImage &&
 					<div>
 						<p>New Image</p>
 						<img
@@ -68,7 +102,7 @@ const ImageUploadForm = () => {
 							src={ URL.createObjectURL(manipulatedImage) }
 						/>
 					</div>
-				}
+				} */}
 			</div>
 			<button onClick={ onSubmit }>Edit Image</button>
 		</form>
