@@ -33,6 +33,11 @@ const RangeSlider = ( {
 						callback( parseInt( e.target.value ) ); // invoke callback.
 					}
 				} }
+				onKeyUp={ (e) => {
+					// Set value with keyboard.
+					setValue( parseInt( e.target.value ) );
+					callback( parseInt( e.target.value ) );
+				} }
 				type="range"
 			/>
 		</>
