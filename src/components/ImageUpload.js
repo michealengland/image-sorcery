@@ -1,37 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { imageEdit } from '../utilities/jimp/ImageManipulation';
+import { resizeImage, imageEdit } from '../utilities/jimp/ImageManipulation';
 import RangeSlider from './RangeSlider';
 
 const ImageUploadForm = () => {
 	const [media, setMedia] = useState();                       // initial upload.
 	const [editingImage, setEditingImage] = useState();         // during edit.
-	const [manipulatedImage, setManipulatedImage] = useState(); // new image.
+	const [previewImage, setPreviewImage] = useState(); // new image.
 	const [editSettings, setEditSettings] = useState({
 		brightness: 0,
 	});
 
-	// Set state during image resize.
-	const resizeCallback = (image, blob) => {
-		setEditingImage(blob);      // Image created using blobs.
-		setManipulatedImage(image); // Image created with File API.
+	// Setup images for manipulation.
+	const resizeCallback = (blob) => {
+		setPreviewImage(blob); // Optimize image for editing.
+		setEditingImage(blob); // Use optimized image during editing.
 	}
 
-	const editImageCallback = (image, blob) => {
-		setEditingImage(blob);  // Image created using blobs.
-	}
-
-	// Set media upload.
+	// Run image through Jimp after upload.
 	const onMediaUpload = (e) => {
-		setMedia(e.target.files[0]);                    // Set fullsize image.
-		// resizeImage(e.target.files[0], resizeCallback, editSettings); // Run image through Jimp.
-		imageEdit(e.target.files[0], editImageCallback, editSettings);
+		setMedia(e.target.files[0]);                    // Store media upload.
+		resizeImage(e.target.files[0], resizeCallback); // Get compressed media upload.
+	}
+
+	// Update editor preview with current image changes.
+	const editImageCallback = (blob) => {
+		setEditingImage(blob);  // New Image Change.
 	}
 
 	// Clear media selection.
 	const onMediaReset = () => {
 		setMedia();
 		setEditingImage();
-		setManipulatedImage();
+		setPreviewImage();
 	}
 
 	// Submit form.
@@ -51,9 +51,9 @@ const ImageUploadForm = () => {
 	}
 
 	useEffect(() => {
-		console.log('edit settings changed');
-		if ( editSettings !== {} && media ) {
-			imageEdit(media, resizeCallback, editSettings);
+		// Generate new Image from previewImage.
+		if ( previewImage && editSettings !== {} ) {
+			imageEdit(previewImage, editImageCallback, editSettings);
 		}
 	}, [editSettings]);
 
@@ -68,15 +68,6 @@ const ImageUploadForm = () => {
 					onChange={ onMediaUpload }
 					type="file"
 				/>
-				{/* { media &&
-					<div>
-						<button onClick={ onMediaReset }>Reset</button>
-						<img
-							alt={ media.name }
-							src={ URL.createObjectURL(media) }
-						/>
-					</div>
-				} */}
 				{ editingImage &&
 					<>
 						<div>
@@ -99,15 +90,6 @@ const ImageUploadForm = () => {
 						/>
 					</>
 				}
-				{/* { manipulatedImage &&
-					<div>
-						<p>New Image</p>
-						<img
-							alt={ manipulatedImage.name }
-							src={ URL.createObjectURL(manipulatedImage) }
-						/>
-					</div>
-				} */}
 			</div>
 			<button onClick={ onSubmit }>Edit Image</button>
 		</form>

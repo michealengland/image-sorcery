@@ -7,20 +7,15 @@ import Jimp from 'jimp';
  * @param {Function} callback to execute.
  * @returns {Object} editSettings with value enhancements.
  */
-const resizeImage = (imageFile, callback, editSettings) => {
+const resizeImage = (imageFile, callback) => {
 	Jimp.read( URL.createObjectURL(imageFile) )
 	.then( image => (
 		image
-			.brightness(editSettings.brightness)
+			.scaleToFit(600, 600)
+			.quality(90)
 			.getBuffer(Jimp.AUTO, (err, buffer) => {
 				// Conver buffer into blob for image editing.
-				const blob = new Blob([buffer], {type: imageFile.type});
-				// Convert buffer to new image file.
-				const optimizedImage = new File([buffer], imageFile.name, {
-					type: 'Jimp.AUTO',
-				});
-
-				callback(optimizedImage, blob);
+				callback( new Blob( [buffer], {type: imageFile.type} ) );
 			})
 	))
 	.catch( err => {
@@ -29,7 +24,7 @@ const resizeImage = (imageFile, callback, editSettings) => {
 }
 
 /**
- * Generate a new resized and compressed image file.
+ * Apply enhancements to an image.
  *
  * @param {Object} File of image to resize.
  * @param {Function} callback to execute.
@@ -39,19 +34,10 @@ const imageEdit = (imageFile, callback, editSettings) => {
 	Jimp.read( URL.createObjectURL(imageFile) )
 	.then( image => (
 		image
-			.scaleToFit( 600, 600 )
 			.brightness(editSettings.brightness)
 			.getBuffer(Jimp.AUTO, (err, buffer) => {
-				console.log('buffer', buffer);
-
 				// Conver buffer into blob for image editing.
-				const blob = new Blob([buffer], {type: imageFile.type});
-				// Convert buffer to new image file.
-				const optimizedImage = new File([buffer], imageFile.name, {
-					type: 'Jimp.AUTO',
-				});
-
-				callback(optimizedImage, blob);
+				callback( new Blob( [buffer], {type: imageFile.type} ) );
 			})
 	))
 	.catch( err => {
