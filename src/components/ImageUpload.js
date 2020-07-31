@@ -3,9 +3,11 @@ import { resizeImage, imageEdit } from '../utilities/jimp/ImageManipulation';
 import RangeSlider from './RangeSlider';
 
 const ImageUploadForm = () => {
-	const [media, setMedia] = useState();                       // initial upload.
-	const [editingImage, setEditingImage] = useState();         // during edit.
+	const [media, setMedia] = useState();               // initial upload.
+	const [editingImage, setEditingImage] = useState(); // during edit.
 	const [previewImage, setPreviewImage] = useState(); // new image.
+
+	// Values
 	const [editSettings, setEditSettings] = useState({
 		brightness: 0,
 	});
@@ -53,7 +55,7 @@ const ImageUploadForm = () => {
 		if ( previewImage && editSettings !== {} ) {
 			imageEdit(previewImage, editImageCallback, editSettings);
 		}
-	}, [editSettings]);
+	}, [previewImage, editSettings]);
 
 	return (
 		<form>
@@ -89,7 +91,7 @@ const ImageUploadForm = () => {
 					</>
 				}
 			</div>
-			<button onClick={ onSubmit }>Edit Image</button>
+			{ media && <button onClick={ onSubmit }>Edit Image</button> }
 		</form>
 	)
 }
