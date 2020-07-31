@@ -42,12 +42,10 @@ const ImageUploadForm = () => {
 
 	// Brightness value beteen -1 and +1.
 	const onBrightnessSelect = (rangeValue) => {
-		const updateObject = {
+		setEditSettings( {
 			...editSettings,
 			brightness: rangeValue/100,
-		}
-
-		setEditSettings( updateObject );
+		} );
 	}
 
 	useEffect(() => {
