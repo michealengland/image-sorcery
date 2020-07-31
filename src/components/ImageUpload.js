@@ -80,7 +80,7 @@ const ImageUploadForm = () => {
 							/>
 						</div>
 						<RangeSlider
-							label="Brightness"
+							label={`Brightness ${Math.floor( editSettings.brightness*100)}%`}
 							name="brightness"
 							min={ -100 }
 							max={ 100 }
