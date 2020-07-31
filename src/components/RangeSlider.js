@@ -9,14 +9,23 @@ const RangeSlider = ( {
 	name = String,
 } ) => {
 	const [value, setValue] = useState(initial);
-	const [previous, setPrevious] = useState(value);
+	const [previous, setPrevious] = useState(initial);
+
+	const inputStyle = {
+		marginBottom: `20px`,
+	}
+
+	const labelStyle = {
+		display: `block`,
+	}
 
 	return (
 		<>
-			<label htmlFor={ name }>{ label }</label>
+			<label style={ labelStyle } htmlFor={ name }>{ label }</label>
 			<input
+				sytle={ inputStyle }
 				id={ name }
-				initial={ initial }
+				default={ initial }
 				max={ max }
 				min={ min }
 				name={ name }

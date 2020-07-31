@@ -11,6 +11,8 @@ const ImageUploadForm = () => {
 	const [editSettings, setEditSettings] = useState({
 		brightness: 0,
 		contrast: 0,
+		saturate: 0,
+		desaturate: 0,
 	});
 
 	// Setup images for manipulation.
@@ -59,6 +61,22 @@ const ImageUploadForm = () => {
 		} );
 	}
 
+	// Contrast value between -1 and +1.
+	const onSaturateSelect = (rangeValue) => {
+		setEditSettings( {
+			...editSettings,
+			saturate: rangeValue,
+		} );
+	}
+
+	// Contrast value between -1 and +1.
+	const onDesaturateSelect = (rangeValue) => {
+		setEditSettings( {
+			...editSettings,
+			desaturate: rangeValue,
+		} );
+	}
+
 	useEffect(() => {
 		// Generate new Image from previewImage.
 		if ( previewImage && editSettings !== {} ) {
@@ -90,20 +108,38 @@ const ImageUploadForm = () => {
 								src={ URL.createObjectURL(editingImage) }
 							/>
 						</div>
-						<RangeSlider
-							label={`Brightness ${Math.floor( editSettings.brightness*100)}%`}
-							name="brightness"
-							min={ -100 }
-							max={ 100 }
-							callback={ onBrightnessSelect }
-						/>
-						<RangeSlider
-							label={`Contrast ${Math.floor( editSettings.contrast*100)}%`}
-							name="contrast"
-							min={ -100 }
-							max={ 100 }
-							callback={ onContrastSelect }
-						/>
+						<div>
+							<RangeSlider
+								label={`Brightness ${Math.floor( editSettings.brightness*100)}%`}
+								name="brightness"
+								min={ -100 }
+								max={ 100 }
+								callback={ onBrightnessSelect }
+							/>
+							<RangeSlider
+								label={`Contrast ${Math.floor( editSettings.contrast*100)}%`}
+								name="contrast"
+								min={ -100 }
+								max={ 100 }
+								callback={ onContrastSelect }
+							/>
+							<RangeSlider
+								label={`Saturation ${Math.floor( editSettings.saturate)}`}
+								name="saturate"
+								initial={ 0 }
+								min={ 0 }
+								max={ 100 }
+								callback={ onSaturateSelect }
+							/>
+							<RangeSlider
+								label={`Desaturation ${Math.floor( editSettings.desaturate)}`}
+								name="desaturate"
+								initial={ 0 }
+								min={ 0 }
+								max={ 100 }
+								callback={ onDesaturateSelect }
+							/>
+						</div>
 					</>
 				}
 			</div>
