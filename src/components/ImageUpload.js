@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { imageEdit } from '../utilities/jimp/ImageManipulation';
-import { brightness } from 'jimp';
 import RangeSlider from './RangeSlider';
 
 const ImageUploadForm = () => {
@@ -81,6 +80,7 @@ const ImageUploadForm = () => {
 				{ editingImage &&
 					<>
 						<div>
+							<button onClick={ onMediaReset }>Reset</button>
 							<p>Editing Image</p>
 							<img
 								style={{
