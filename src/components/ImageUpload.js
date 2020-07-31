@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import resizeImage from '../utilities/jimp/ImageManipulation';
+import { imageEdit } from '../utilities/jimp/ImageManipulation';
+import { brightness } from 'jimp';
+import RangeSlider from './RangeSlider';
 
 const ImageUploadForm = () => {
 	const [media, setMedia] = useState();                       // initial upload.
@@ -15,10 +17,15 @@ const ImageUploadForm = () => {
 		setManipulatedImage(image); // Image created with File API.
 	}
 
+	const editImageCallback = (image, blob) => {
+		setEditingImage(blob);  // Image created using blobs.
+	}
+
 	// Set media upload.
 	const onMediaUpload = (e) => {
 		setMedia(e.target.files[0]);                    // Set fullsize image.
-		resizeImage(e.target.files[0], resizeCallback, editSettings); // Run image through Jimp.
+		// resizeImage(e.target.files[0], resizeCallback, editSettings); // Run image through Jimp.
+		imageEdit(e.target.files[0], editImageCallback, editSettings);
 	}
 
 	// Clear media selection.
@@ -35,10 +42,10 @@ const ImageUploadForm = () => {
 	}
 
 	// Brightness value beteen -1 and +1.
-	const onBrightnessSelect = (brightness) => {
+	const onBrightnessSelect = (rangeValue) => {
 		const updateObject = {
 			...editSettings,
-			brightness: brightness.target.value/100,
+			brightness: rangeValue/100,
 		}
 
 		setEditSettings( updateObject );
@@ -47,7 +54,7 @@ const ImageUploadForm = () => {
 	useEffect(() => {
 		console.log('edit settings changed');
 		if ( editSettings !== {} && media ) {
-			resizeImage(media, resizeCallback, editSettings)
+			imageEdit(media, resizeCallback, editSettings);
 		}
 	}, [editSettings]);
 
@@ -83,14 +90,12 @@ const ImageUploadForm = () => {
 								src={ URL.createObjectURL(editingImage) }
 							/>
 						</div>
-						<label htmlFor="brightness">Brightness</label>
-						<input
-							id="brightness"
-							max="100"
-							min="-100"
+						<RangeSlider
+							label="Brightness"
 							name="brightness"
-							onChange={ onBrightnessSelect }
-							type="range"
+							min={ -100 }
+							max={ 100 }
+							callback={ onBrightnessSelect }
 						/>
 					</>
 				}
