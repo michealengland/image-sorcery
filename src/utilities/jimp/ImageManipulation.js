@@ -35,6 +35,7 @@ const imageEdit = (imageFile, callback, editSettings) => {
 	.then( image => (
 		image
 			.brightness(editSettings.brightness)
+			.contrast( editSettings.contrast )
 			.getBuffer(Jimp.AUTO, (err, buffer) => {
 				// Conver buffer into blob for image editing.
 				callback( new Blob( [buffer], {type: imageFile.type} ) );

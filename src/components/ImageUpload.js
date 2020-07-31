@@ -10,6 +10,7 @@ const ImageUploadForm = () => {
 	// Values
 	const [editSettings, setEditSettings] = useState({
 		brightness: 0,
+		contrast: 0,
 	});
 
 	// Setup images for manipulation.
@@ -42,11 +43,19 @@ const ImageUploadForm = () => {
 		console.log('form submitted');
 	}
 
-	// Brightness value beteen -1 and +1.
+	// Brightness value between -1 and +1.
 	const onBrightnessSelect = (rangeValue) => {
 		setEditSettings( {
 			...editSettings,
 			brightness: rangeValue/100,
+		} );
+	}
+
+	// Contrast value between -1 and +1.
+	const onContrastSelect = (rangeValue) => {
+		setEditSettings( {
+			...editSettings,
+			contrast: rangeValue/100,
 		} );
 	}
 
@@ -87,6 +96,13 @@ const ImageUploadForm = () => {
 							min={ -100 }
 							max={ 100 }
 							callback={ onBrightnessSelect }
+						/>
+						<RangeSlider
+							label={`Contrast ${Math.floor( editSettings.contrast*100)}%`}
+							name="contrast"
+							min={ -100 }
+							max={ 100 }
+							callback={ onContrastSelect }
 						/>
 					</>
 				}
