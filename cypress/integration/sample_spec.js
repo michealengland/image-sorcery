@@ -5,9 +5,7 @@ describe('My First Test', () => {
 		// 1. Go to app main page.
 		cy.visit('http://localhost:3000/');
 
-		// 2. Query an element.
-		cy.get('#image-staging');
-
-		expect(true).to.equal(true)
+		// 2. Select the file input, and attach image.
+		cy.get('input[type="file"]').click().attachFile('images/tobias-tullius-IiE50WMRa7I-unsplash.jpg');
 	})
 })
