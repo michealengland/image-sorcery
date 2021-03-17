@@ -3,6 +3,9 @@ describe('My First Test', () => {
 		// 1. Go to app main page.
 		cy.visit('http://localhost:3000/');
 
+		// 2. Query an element.
+		cy.get('#image-staging');
+
 		expect(true).to.equal(true)
 	})
 })
