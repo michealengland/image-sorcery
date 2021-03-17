@@ -1,3 +1,5 @@
+/* global cy */
+
 describe('My First Test', () => {
 	it('Does not do much!', () => {
 		// 1. Go to app main page.
