@@ -8,6 +8,7 @@ const RangeSlider = ( {
 	min = 0,
 	name = String,
 } ) => {
+	// eslint-disable-next-line no-unused-vars
 	const [value, setValue] = useState(initial);
 	const [previous, setPrevious] = useState(initial);
 
